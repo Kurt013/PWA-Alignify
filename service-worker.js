@@ -47,34 +47,3 @@ self.addEventListener('activate', (event) => {
       })
   );
 });
-
-// Listen for push notifications
-self.addEventListener('push', (event) => {
-  let data = { title: 'Posture Alert', message: 'Incorrect posture detected!' };
-
-  if (event.data) {
-    // Assuming the push payload is JSON
-    data = event.data.json();
-  }
-
-  const options = {
-    body: data.message,
-    icon: '/assets/icon-192x192.png',
-    badge: '/assets/icon-192x192.png',
-  };
-
-  // Show the notification
-  event.waitUntil(
-    self.registration.showNotification(data.title, options)
-  );
-});
-
-// Handle notification click events
-self.addEventListener('notificationclick', (event) => {
-  event.notification.close(); // Close the notification when clicked
-  
-  // Focus on the app window or open a specific page
-  event.waitUntil(
-    clients.openWindow('/') // You can specify any URL here
-  );
-});
