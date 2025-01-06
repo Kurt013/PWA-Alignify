@@ -149,6 +149,7 @@
         let model, webcam, ctx, labelContainer, maxPredictions;
         let isRunning = false;
         let notification;
+        let notificationActive = false;  // Flag to track if a notification is already active
 
         async function requestNotificationPermission() {
             if (Notification.permission !== "granted") {
@@ -157,11 +158,20 @@
         }
 
         function showNotification() {
-            if (Notification.permission === "granted") {
+            if (Notification.permission === "granted" && !notificationActive) {
+                // Set the flag to true to indicate that a notification is being shown
+                notificationActive = true;
+                
+                // Show the notification
                 notification = new Notification("Posture Alert", {
                     body: "Incorrect Posture Detected!",
                     icon: "./assets/good_posture.webp",
                 });
+
+                // When the notification is closed, reset the flag so new notifications can be shown
+                notification.onclose = () => {
+                    notificationActive = false;
+                };
             }
         }
 
